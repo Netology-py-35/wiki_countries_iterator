@@ -22,22 +22,21 @@ class CityIterator:
         self.city = c.cities_list()
         self.count = 0
 
+    def __iter__(self):
+        return self
+
     def __next__(self):
-        if self.count < len(self.city):
-            city = self.city[self.count]
+        if self.count > len(self.city):
+            raise StopIteration
+        else:
             try:
+                city = self.city[self.count]
                 self.count += 1
                 return wiki.page(city).url
-            except Exception:
-                print("City Not Found")
-        else:
-            raise StopIteration
+            except:
+                return 'City Not Found'
 
 
 if __name__ == '__main__':
-    city_iterator = CityIterator("countries.json")
-    print(next(city_iterator))
-    print(next(city_iterator))
-    print(next(city_iterator))
-    print(next(city_iterator))
-    print(next(city_iterator))
+    for item in CityIterator("countries.json"):
+        print(item)
